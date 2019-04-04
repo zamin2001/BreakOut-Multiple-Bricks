@@ -10,13 +10,25 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene,SKPhysicsContactDelegate {
+ 
+
+    var livesCounter = SKLabelNode()
     var ball = SKShapeNode()
     var paddle = SKSpriteNode()
     var brick = SKSpriteNode()
     var loseZone = SKSpriteNode()
-    
+    var playingGame = false
+    var removedBricks = 0
+    var score = 0
+    var lives = 3
     
     override func didMove(to view: SKView) {
+        livesCounter.text = "Lives: \(lives)"
+        livesCounter.zPosition = 1
+        livesCounter.position = CGPoint(x: -200, y: -592)
+        livesCounter.fontColor = .white
+        livesCounter.fontSize = 20
+        self.addChild(livesCounter)
         
         physicsWorld.contactDelegate = self
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
@@ -80,8 +92,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     }
     
     func makeBrick() {
-        brick = SKSpriteNode(color: UIColor.blue, size: CGSize(width: 50, height: 20))
-        brick.position = CGPoint(x: frame.midX, y: frame.maxY - 30)
+        brick = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 20))
+        brick.position = CGPoint(x: frame.midX, y: frame.maxY - 50)
         brick.name = "brick"
         brick.physicsBody = SKPhysicsBody(rectangleOf: brick.size)
         brick.physicsBody?.isDynamic = false
@@ -120,12 +132,22 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             brick.removeFromParent()
             ball.removeFromParent()
         }
+        //If the ball contacts the lose zone you should remove the ball from the game and the lives should decrease by 1
         if contact.bodyA.node?.name == "loseZone" ||
             contact.bodyB.node?.name == "loseZone" {
-            print("You lose!")
-            ball.removeFromParent()
+            print("You lost a life!")
+            lives -= 1
+            livesCounter.text = "Lives: \(lives)"
+            if lives == 0 {
+                ball.removeFromParent()
+                //to reset the game do: lives = 3
+                print("Game Over!")
+            }
         }
     }
-    
 }
+    
+    
+    
+
 
