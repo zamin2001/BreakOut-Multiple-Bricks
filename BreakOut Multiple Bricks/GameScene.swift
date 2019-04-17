@@ -8,7 +8,7 @@
 
 import SpriteKit
 import GameplayKit
-
+// Problems still present: The background is not covering the whole screen... and the bricks are not filling up the entire top...instead it is only filling a certain portion of the screen
 class GameScene: SKScene,SKPhysicsContactDelegate {
     
     var ball = SKShapeNode()
@@ -202,7 +202,6 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         let top = Int(frame.maxY)
         
         // makes three rows of bricks across the top
-        
         
         for x in 0..<count { makeBrick(x: x * 55 + xOffset, y: top - 15, color: UIColor.blue)}
         
